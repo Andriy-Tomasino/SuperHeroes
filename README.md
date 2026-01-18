@@ -1,85 +1,36 @@
-# Superhero Database Web Application
+# Superhero Database
 
-Веб-додаток для управління базою даних супергероїв з можливістю виконання CRUD операцій.
+Простий веб-додаток для зберігання та управління інформацією про супергероїв. Реалізовані базові CRUD операції та робота з зображеннями.
 
-## Технологічний стек
+## Технології
 
-### Backend
-- **Node.js** з фреймворком **Nest.js**
-- **TypeORM** для роботи з базою даних
-- **PostgreSQL** як база даних
-- **Multer** для завантаження файлів
+Backend: Node.js + Nest.js, TypeORM, PostgreSQL, Multer для файлів
+Frontend: React, React Router, Axios, Context API
 
-### Frontend
-- **React** з React Router
-- **Axios** для HTTP запитів
-- **Context API** для управління станом
+## Що реалізовано
 
-## Функціональні можливості
+- Створення, редагування та видалення супергероїв
+- Додавання та видалення зображень
+- Список з пагінацією (5 на сторінку)
+- Детальна сторінка з усією інформацією
 
-✅ **CRUD операції з супергероями:**
-- Створення нового супергероя
-- Редагування існуючого супергероя
-- Видалення супергероя
-- Перегляд деталей супергероя
+## Як запустити
 
-✅ **Управління зображеннями:**
-- Додавання зображень до супергероя
-- Видалення зображень з супергероя
-- Відображення зображень у списку та деталях
+Потрібно: Node.js 14+, PostgreSQL 12+, npm
 
-✅ **Список супергероїв:**
-- Пагінація (5 елементів на сторінку)
-- Відображення одного зображення та nickname для кожного супергероя
-
-## Встановлення та запуск
-
-### Передумови
-
-- Node.js (версія 14 або вище)
-- PostgreSQL (версія 12 або вище)
-- npm або yarn
-
-### Крок 1: Клонування репозиторію
-
+1. Клонування репозиторію та встановлення залежностей:
 ```bash
 git clone <repository-url>
 cd SuperHeroes
-```
-
-### Крок 2: Встановлення залежностей
-
-Встановіть залежності для всього проекту:
-
-```bash
 npm run install:all
 ```
 
-Або встановіть окремо:
-
-```bash
-# Коренева директорія
-npm install
-
-# Backend
-cd backend
-npm install
-
-# Frontend
-cd ../frontend
-npm install
-```
-
-### Крок 3: Налаштування бази даних
-
-1. Створіть базу даних PostgreSQL:
-
+2. Створення бази даних:
 ```sql
 CREATE DATABASE superheroes_db;
 ```
 
-2. Налаштуйте змінні оточення для backend. Створіть файл `backend/.env`:
-
+3. Створиння `backend/.env`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -90,39 +41,21 @@ PORT=3001
 UPLOAD_DEST=./uploads
 ```
 
-### Крок 4: Запуск додатку
-
-#### Запуск Backend
-
+4. Запуск backend:
 ```bash
-# З кореневої директорії
 npm run dev:backend
-
-# Або з директорії backend
-cd backend
-npm run start:dev
+# або 
+cd backend && npm run start:dev
 ```
 
-Backend буде доступний на `http://localhost:3001`
-
-#### Запуск Frontend
-
-В новому терміналі:
-
+5. Запуск frontend:
 ```bash
-# З кореневої директорії
 npm run dev:frontend
-
-# Або з директорії frontend
-cd frontend
-npm start
+# або 
+cd frontend && npm start
 ```
 
-Frontend буде доступний на `http://localhost:3000`
-
-### Крок 5: Відкрити додаток
-
-Відкрийте браузер і перейдіть на `http://localhost:3000`
+Відкрити `http://localhost:3000`
 
 ## Структура проекту
 
@@ -149,82 +82,33 @@ SuperHeroes/
 └── package.json         # Root package.json
 ```
 
-## API Endpoints
+## API
 
-### Superheroes
+`GET /api/superheroes?page=1&limit=5` - список
+`GET /api/superheroes/:id` - деталі
+`POST /api/superheroes` - створити
+`PATCH /api/superheroes/:id` - оновити
+`DELETE /api/superheroes/:id` - видалити
 
-- `GET /api/superheroes` - Отримати список супергероїв (з пагінацією)
-  - Query params: `page`, `limit` (за замовчуванням: page=1, limit=5)
-- `GET /api/superheroes/:id` - Отримати деталі супергероя
-- `POST /api/superheroes` - Створити нового супергероя
-- `PATCH /api/superheroes/:id` - Оновити супергероя
-- `DELETE /api/superheroes/:id` - Видалити супергероя
+`POST /api/superheroes/:id/images` - додати зображення (multipart/form-data)
+`DELETE /api/superheroes/:id/images/:imageId` - видалити зображення
 
-### Images
-
-- `POST /api/superheroes/:id/images` - Додати зображення до супергероя
-  - Body: `multipart/form-data` з полем `image`
-- `DELETE /api/superheroes/:id/images/:imageId` - Видалити зображення
-
-## Тестування
-
-### Backend тести
+## Тести
 
 ```bash
-cd backend
-npm test
+cd backend && npm test
+cd frontend && npm test
 ```
 
-### Frontend тести
+## Припущення
 
-```bash
-cd frontend
-npm test
-```
+- PostgreSQL для БД (локальна для розробки)
+- Зображення зберігаються в `backend/uploads/`, формати: JPG, PNG, GIF (макс 5MB)
+- CORS налаштований для localhost:3000
+- Пагінація: 5 елементів за замовчуванням
+- TypeORM `synchronize: true` тільки для розробки 
 
-## Припущення та рішення
+## Технічні рішення
 
-### Припущення
+Використав Context API замість Redux - простіше для такого проекту. Асинхронні операції через async/await з обробкою помилок. Валідація на backend через class-validator. Зображення поки локально.
 
-1. **База даних**: Використовується PostgreSQL. Для розробки можна використовувати локальну базу даних.
-
-2. **Зображення**: 
-   - Зображення зберігаються локально в директорії `backend/uploads/`
-   - Підтримуються формати: JPG, JPEG, PNG, GIF
-   - Максимальний розмір файлу: 5MB
-
-3. **CORS**: Backend налаштований для прийняття запитів з `http://localhost:3000`
-
-4. **Пагінація**: За замовчуванням показується 5 елементів на сторінку
-
-5. **TypeORM Synchronize**: У режимі розробки `synchronize: true` для автоматичного створення таблиць. **УВАГА**: Не використовуйте це у продакшені!
-
-### Технічні рішення
-
-1. **State Management**: Використовується React Context API замість Redux для спрощення архітектури та меншої кількості залежностей.
-
-2. **Async Operations**: Всі асинхронні операції обробляються через async/await в Context API з належною обробкою помилок.
-
-3. **Компоненти**: 
-   - `SuperheroList` - список з пагінацією
-   - `SuperheroDetail` - детальна інформація про супергероя
-   - `SuperheroForm` - форма для створення/редагування
-
-4. **Валідація**: Використовується `class-validator` на backend для валідації даних.
-
-5. **Файлова система**: Зображення зберігаються локально. У продакшені рекомендується використовувати cloud storage (AWS S3, Cloudinary тощо).
-
-## Можливі покращення
-
-- [ ] Додати автентифікацію та авторизацію
-- [ ] Реалізувати пошук та фільтрацію супергероїв
-- [ ] Додати можливість сортування
-- [ ] Покращити обробку помилок на frontend
-- [ ] Додати loading states для кращого UX
-- [ ] Реалізувати оптимізацію зображень (resize, compression)
-- [ ] Додати E2E тести
-- [ ] Використати cloud storage для зображень у продакшені
-
-## Автор
-
-Розроблено як тестове завдання для створення бази даних супергероїв.
