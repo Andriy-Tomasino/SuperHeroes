@@ -49,6 +49,6 @@ describe('SuperheroList', () => {
 
   it('renders add button', () => {
     renderWithRouter(<SuperheroList />);
-    expect(screen.getByText('Додати супергероя')).toBeInTheDocument();
+    expect(screen.getByText('Create Superhero')).toBeInTheDocument();
   });
 });

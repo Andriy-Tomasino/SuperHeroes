@@ -138,7 +138,8 @@ export class SuperheroService {
     }
 
     // Delete file from filesystem
-    const filePath = image.path;
+    const uploadDir = process.env.UPLOAD_DEST || './uploads';
+    const filePath = path.join(process.cwd(), uploadDir, image.filename);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
